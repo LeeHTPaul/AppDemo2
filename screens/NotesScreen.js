@@ -6,7 +6,7 @@ import {
  FlatList,
  TouchableOpacity,
 } from "react-native";
-import { Entypo } from "@expo/vector-icons";
+import { Entypo, MaterialIcons } from "@expo/vector-icons";
 import * as SQLite from "expo-sqlite";
 
 const db = SQLite.openDatabase("notes.db");
@@ -15,26 +15,22 @@ let count = 0;
 export default function NotesScreen({ navigation, route }) {
  const [notes, setNotes] = useState([]);
  
- //console.log("notes=", {notes}, notes.length);
-
- /*  const [notes, setNotes] = useState([
-   { title: "Walk the cat", done: false, id: "0" },
- ]);
- */
+ console.log("before refreshNotes()", count++, route.params);
 
  function refreshNotes() {
+  console.log("inside refreshNotes()", count++, route.params);
     db.transaction((tx) => {
       tx.executeSql(
         "SELECT * FROM notes",
         null,
-        (txObj, { rows: {_array } }) => setNotes(_array),
+        (txObj, { rows: {_array } }) => {setNotes(_array); console.log("refresh db",count++, {_array})},
         (txObj, error) => console.log("Error ", error)
-      );
-    });
+      ); 
+    }),console.log("Failed in refreshNote() call", count++), console.log("success in refreshNote()", count++);
   };
 
  useEffect( () => {
-    db.transaction((tx) => {
+      db.transaction((tx) => {
       tx.executeSql(
         `CREATE TABLE IF NOT EXISTS
         notes
@@ -47,6 +43,7 @@ export default function NotesScreen({ navigation, route }) {
   );
 
   useEffect(() => {
+    console.log("inside useeffect insert", count++, route.params);
     if (route.params?.text) {
       db.transaction((tx) => {
         tx.executeSql("INSERT INTO notes (done, value) VALUES (0, ?)", [
@@ -54,12 +51,13 @@ export default function NotesScreen({ navigation, route }) {
         ]);
       },
       null,
-      refreshNotes
+      refreshNotes,
       );
-    }
+    }     
   }, [route.params?.text]);
 
  useEffect(() => {
+  console.log("inside useeffect touchable",  count++, route.params);
    navigation.setOptions({
      headerRight: () => (
        <TouchableOpacity onPress={addNote}>
@@ -74,8 +72,9 @@ export default function NotesScreen({ navigation, route }) {
    });
  });
 
- console.log("before setNotes", count++, route.params);
+ //console.log("in notescreen", count++, route.params);
  
+ /*
  useEffect(() => {
     if (route.params?.text) {
       const newNote = {
@@ -86,7 +85,7 @@ export default function NotesScreen({ navigation, route }) {
       setNotes([...notes, newNote]);
     }
   }, [route.params?.text]);
-
+*/
  function addNote() {
    navigation.navigate("Add Note");
  };
@@ -113,6 +112,7 @@ export default function NotesScreen({ navigation, route }) {
        style={{ width: "100%" }}
        data={notes}
        renderItem={renderItem}
+       keyExtractor={(item) => item.id.toString()}
      />
    </View>
  );

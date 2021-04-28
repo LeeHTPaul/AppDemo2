@@ -22,7 +22,7 @@ export default function AddScreen({ navigation }) {
 
 export default function AddScreen({ route, navigation }) {
     const [text, setText] = useState("");
-    console.log("addscreen=", {text}, text.length);
+    //console.log("addscreen=", {text}, text.length);
 
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
