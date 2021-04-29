@@ -10,8 +10,6 @@ import * as SQLite from "expo-sqlite";
 import NotesStack from "./screens/NotesStack";
 import AddScreen from "./screens/AddScreen";
 
-/*const db = SQLite.openDatabase("notes.db"); moved to MotesScreen*/
-
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -29,34 +27,6 @@ export default function App() {
   );
  }
  
-/*
-export default function App() {
- return (
-   <NavigationContainer>
-     <Stack.Navigator>
-       <Stack.Screen
-         name="Notes"
-         component={NotesScreen}
-         options={{
-           headerTitle: "Notes App",
-           headerTitleStyle: {
-             fontWeight: "bold",
-             fontSize: 30,
-           },
-           headerStyle: {
-             height: 120,
-             backgroundColor: "green",
-             borderBottomColor: "#ccc",
-             borderBottomWidth: 1,
-           },
-         }}
-       />
-     </Stack.Navigator>
-   </NavigationContainer>
- );
-}
-modal */
-
 const styles = StyleSheet.create({
  container: {
    flex: 1,

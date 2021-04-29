@@ -16,7 +16,7 @@ export default function NotesScreen({ navigation, route }) {
  const [notes, setNotes] = useState([]);
  
   function refreshNotes() {
-  console.log("inside refreshNotes()", count++, route.params);
+  //console.log("inside refreshNotes()", count++, route.params);
     db.transaction((tx) => {
       tx.executeSql(
         "SELECT * FROM notes",
@@ -24,7 +24,7 @@ export default function NotesScreen({ navigation, route }) {
         (txObj, { rows: {_array } }) => setNotes(_array),
         (txObj, error) => console.log("Error ", error)
       ); 
-    }),console.log("Failed in refreshNote() call", count++), console.log("success in refreshNote()", count++);
+    });
   };
 
  useEffect( () => {
@@ -41,7 +41,7 @@ export default function NotesScreen({ navigation, route }) {
   );
 
   useEffect(() => {
-    console.log("inside useeffect insert", count++, route.params);
+    //console.log("inside useeffect insert", count++, route.params);
     if (route.params?.text) {
       db.transaction((tx) => {
         tx.executeSql("INSERT INTO notes (done, title) VALUES (0, ?)", [
@@ -55,7 +55,7 @@ export default function NotesScreen({ navigation, route }) {
   }, [route.params?.text]);
 
  useEffect(() => {
-  console.log("inside useeffect touchable",  count++, route.params);
+  //console.log("inside useeffect touchable",  count++, route.params);
    navigation.setOptions({
      headerRight: () => (
        <TouchableOpacity onPress={addNote}>
@@ -70,24 +70,9 @@ export default function NotesScreen({ navigation, route }) {
    });
  });
 
- //console.log("in notescreen", count++, route.params);
- 
- /*
- useEffect(() => {
-    if (route.params?.text) {
-      const newNote = {
-        title: route.params.text,
-        done: false,
-        id: notes.length.toString(),
-      };
-      setNotes([...notes, newNote]);
-    }
-  }, [route.params?.text]);
-*/
  function addNote() {
    navigation.navigate("Add Note");
  };
-
 
  function deleteNote(id) {
    console.log("Deleting ", id, count++);
@@ -124,18 +109,6 @@ export default function NotesScreen({ navigation, route }) {
      </View>
    );
  };
-
- /* these codes will delete all
-        <Text style={{ textAlign: "left", fontSize: 16 }}>{item.title}</Text>
-         <TouchableOpacity onPress={deleteNote(item.id)}>
-         <Entypo
-           name="trash" 
-           size={16}
-           color="black" 
-           style={{ marginRight: 20 }}
-         />
-       </TouchableOpacity>
- */
 
  return (
    <View style={styles.container}>

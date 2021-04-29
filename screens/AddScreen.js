@@ -4,25 +4,8 @@ import { StyleSheet, FlatList } from "react-native";
 import { useEffect, useState } from "react";
 import {TextInput} from "react-native";
 
-/* before text input
-export default function AddScreen({ navigation }) {
- return (
-   <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-     <Text>This is the add screen</Text>
-     <TouchableOpacity
-       onPress={() => navigation.goBack()}
-       style={{ padding: 10 }}
-     >
-       <Text style={{ color: "orange" }}>Dismiss</Text>
-     </TouchableOpacity>
-   </View>
- );
-}
-*/
-
 export default function AddScreen({ route, navigation }) {
     const [text, setText] = useState("");
-    //console.log("addscreen=", {text}, text.length);
 
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
@@ -55,7 +38,6 @@ export default function AddScreen({ route, navigation }) {
     );
    }
    
-   
    const styles = StyleSheet.create({
     label: {
       fontWeight: "bold",
@@ -87,5 +69,3 @@ export default function AddScreen({ route, navigation }) {
     },
    });
    
-   
-      
