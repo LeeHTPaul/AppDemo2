@@ -15,15 +15,13 @@ let count = 0;
 export default function NotesScreen({ navigation, route }) {
  const [notes, setNotes] = useState([]);
  
- console.log("before refreshNotes()", count++, route.params);
-
- function refreshNotes() {
+  function refreshNotes() {
   console.log("inside refreshNotes()", count++, route.params);
     db.transaction((tx) => {
       tx.executeSql(
         "SELECT * FROM notes",
         null,
-        (txObj, { rows: {_array } }) => {setNotes(_array); console.log("refresh db",count++, {_array})},
+        (txObj, { rows: {_array } }) => setNotes(_array),
         (txObj, error) => console.log("Error ", error)
       ); 
     }),console.log("Failed in refreshNote() call", count++), console.log("success in refreshNote()", count++);
@@ -46,7 +44,7 @@ export default function NotesScreen({ navigation, route }) {
     console.log("inside useeffect insert", count++, route.params);
     if (route.params?.text) {
       db.transaction((tx) => {
-        tx.executeSql("INSERT INTO notes (done, value) VALUES (0, ?)", [
+        tx.executeSql("INSERT INTO notes (done, title) VALUES (0, ?)", [
           route.params.text,
         ]);
       },
@@ -90,6 +88,17 @@ export default function NotesScreen({ navigation, route }) {
    navigation.navigate("Add Note");
  };
 
+
+ function deleteNote(id) {
+   console.log("Deleting ", id, count++);
+  db.transaction((tx) => {
+    tx.executeSql(`DELETE FROM notes WHERE id =${id}`);
+  },
+  null,
+  refreshNotes,
+  );
+ };
+
  function renderItem({ item }) {
    return (
      <View
@@ -99,12 +108,34 @@ export default function NotesScreen({ navigation, route }) {
          paddingBottom: 20,
          borderBottomColor: "#ccc",
          borderBottomWidth: 1,
+         flexDirection: "row",
+         justifyContent: "space-between",
        }}
      >
        <Text style={{ textAlign: "left", fontSize: 16 }}>{item.title}</Text>
+         <TouchableOpacity onPress={ () => deleteNote(item.id)}>
+         <Entypo
+           name="trash" 
+           size={16}
+           color="black" 
+           style={{ marginRight: 20 }}
+         />
+       </TouchableOpacity>
      </View>
    );
  };
+
+ /* these codes will delete all
+        <Text style={{ textAlign: "left", fontSize: 16 }}>{item.title}</Text>
+         <TouchableOpacity onPress={deleteNote(item.id)}>
+         <Entypo
+           name="trash" 
+           size={16}
+           color="black" 
+           style={{ marginRight: 20 }}
+         />
+       </TouchableOpacity>
+ */
 
  return (
    <View style={styles.container}>
